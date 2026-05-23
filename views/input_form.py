@@ -1,8 +1,12 @@
 import streamlit as st
 import pandas as pd
 
-st.markdown("## 📋 Student Profile Configuration")
-st.caption("Load a template configuration or orchestrate your parameters manually below.")
+st.markdown("""
+<div style="text-align: center; margin-bottom: 30px;">
+    <h2 style="font-size: 36px; margin-bottom: 8px; color: var(--text-main) !important;">📋 Student Profile Setup</h2>
+    <p style="color: var(--text-muted); font-size: 16px;">Load a pre-configured template or orchestrate your parameters manually below.</p>
+</div>
+""", unsafe_allow_html=True)
 
 MOCK_PROFILES = {
     "Custom Profile (Use Interface Controls)": None,
@@ -35,7 +39,7 @@ def get_val(key, default):
     return default
 
 # Elegant Main Screen Grid Layout
-col1, col2, col3 = st.columns(3)
+col1, col2, col3 = st.columns(3, gap="medium")
 
 with col1:
     st.markdown("### 📊 Academic Records")
@@ -66,11 +70,15 @@ with col3:
     age = st.number_input('Age at Enrollment', min_value=15, max_value=90, value=int(get_val('Age at enrollment', 20)))
     gender = st.selectbox('Gender Identity Code', options=[0, 1], index=int(get_val('Gender', 0)), format_func=lambda x: "Male" if x == 1 else "Female")
 
-if st.button("Execute Predictive Matrix Analytics [->]", type="primary"):
-    st.session_state.selected_preset_name = selected_preset
-    st.session_state.student_data = {
-        'gpa': gpa, 'attendance': attendance, 'engagement': engagement, 'income_proxy': income_proxy,
-        'low_gpa_flag': 1 if gpa < 2.0 else 0, 'low_engagement_flag': 1 if engagement < 0.4 else 0,
-        'risk_score': risk_score, 'Unemployment rate': unemployment_rate, 'Age at enrollment': age, 'Gender': gender
-    }
-    st.switch_page("views/dashboard.py")
+st.markdown("<br/>", unsafe_allow_html=True)
+col_btn1, col_btn2, col_btn3 = st.columns([1, 2, 1])
+
+with col_btn2:
+    if st.button("🚀 Execute Predictive Analytics", type="primary", use_container_width=True):
+        st.session_state.selected_preset_name = selected_preset
+        st.session_state.student_data = {
+            'gpa': gpa, 'attendance': attendance, 'engagement': engagement, 'income_proxy': income_proxy,
+            'low_gpa_flag': 1 if gpa < 2.0 else 0, 'low_engagement_flag': 1 if engagement < 0.4 else 0,
+            'risk_score': risk_score, 'Unemployment rate': unemployment_rate, 'Age at enrollment': age, 'Gender': gender
+        }
+        st.switch_page("views/dashboard.py")
