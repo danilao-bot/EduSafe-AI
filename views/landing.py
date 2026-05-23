@@ -3,7 +3,7 @@ import streamlit as st
 st.markdown("""
 <div style='display: flex; align-items: center; gap: 16px; margin-top: 20px; margin-bottom: 10px;'>
     <div style='background-color: #3B82F6; padding: 12px; border-radius: 12px; color: white;'>
-        <h2 style='margin: 0; font-size: 32px;'>[SCHOOL]</h2>
+        <h2 style='margin: 0; font-size: 32px;'>🎓</h2>
     </div>
     <div>
         <h1 style='margin: 0; font-size: 32px; color: #1E293B;'>EduSafe AI™</h1>
@@ -16,7 +16,7 @@ st.markdown("""
 col_hero, _ = st.columns([2, 1])
 
 with col_hero:
-    st.markdown("### [ROBOT] Agentic Student Risk Diagnostics")
+    st.markdown("### 🤖 Agentic Student Risk Diagnostics")
     st.markdown("""
     Welcome to the **EduSafe AI™ Student Success Portal**. This dashboard decouples complex predictive logic from static tracking. 
     By processing behavioral data patterns, financial metrics, and academic milestones, the predictive models run deep feature point checks 

@@ -9,7 +9,7 @@ import os
 
 # Route Guard Configuration
 if st.session_state.student_data is None:
-    st.warning("[WARNING] Access Denied: No student payload detected. Please execute profile configuration first.")
+    st.warning("⚠️ Access Denied: No student payload detected. Please execute profile configuration first.")
     if st.button("Return to Form Setup"):
         st.switch_page("views/input_form.py")
     st.stop()
@@ -86,13 +86,13 @@ with c3:
     st.markdown(comp_html + "</div></div>", unsafe_allow_html=True)
 
 # Row 2 Unified Live XAI Engine Layout Split
-st.markdown("### [SEARCH] Live Decision Driver & Intervention Engine")
-xai_method = st.radio("Active Model Explanation Engine:", ["[LIGHTBULB] Live SHAP (Local Feature Attribution)", "[SCIENCE] Live LIME (Local Surrogacy Boundaries)"], horizontal=True)
+st.markdown("### 🔍 Live Decision Driver & Intervention Engine")
+xai_method = st.radio("Active Model Explanation Engine:", ["💡 Live SHAP (Local Feature Attribution)", "🧪 Live LIME (Local Surrogacy Boundaries)"], horizontal=True)
 
 col_exp_left, col_exp_right = st.columns([3, 2])
 
 with col_exp_left:
-    card_left_html = f """<div class="premium-card"><div class="metric-label">[LIGHTNING] Active Predictive Weights</div><div style='margin-top: 16px;'>"""
+    card_left_html = f """<div class="premium-card"><div class="metric-label">⚡ Active Predictive Weights</div><div style='margin-top: 16px;'>"""
     if "SHAP" in xai_method:
         try:
             exp_key = active_model_key if active_model_key in ['rf', 'xgboost'] else 'rf'
@@ -121,7 +121,7 @@ with col_exp_left:
     st.markdown(card_left_html + "</div></div>", unsafe_allow_html=True)
 
 with col_exp_right:
-    card_right_html = """<div class="premium-card" style="height: 100%;"><div class="metric-label">[TARGET] Smart Advisory Intervention Plan</div><div style='margin-top: 16px;'>"""
+    card_right_html = """<div class="premium-card" style="height: 100%;"><div class="metric-label">🎯 Smart Advisory Intervention Plan</div><div style='margin-top: 16px;'>"""
     recs = 0
     if data['attendance'] < 0.75:
         card_right_html += """<div class="rec-card high-priority"><h5 style='margin:0; color:#EF4444;'>Attendance Recovery Protocol</h5><p style='margin:4px 0 0 0; font-size:12px;'>Student attendance below threshold. Flag immediate counselor check-in routing.</p></div>"""
@@ -136,9 +136,9 @@ with col_exp_right:
         card_right_html += """<div class="rec-card" style="border-left-color:#10B981; background:rgba(16,185,129,0.1);"><h5 style='margin:0; color:#10B981;'>Maintain Current Track</h5><p style='margin:4px 0 0 0; font-size:12px;'>Metrics conform optimally across historical bounds. Continue standard semester mapping tracking.</p></div>"""
     st.markdown(card_right_html + "</div></div>", unsafe_allow_html=True)
 
-with st.expander("[TOOLS] Advanced Technical Diagnostics (Original Plots)"):
-    t1, t2 = st.tabs(["[FIRE] Raw SHAP Force Diagram", "[SCIENCE] Raw LIME Perturbation Chart"])
-    with t1: st.info("[LIGHTBULB] Dynamic weights above render live explanations. Matplotlib SHAP wrappers map to native models on execution host runtime.")
+with st.expander("🛠️ Advanced Technical Diagnostics (Original Plots)"):
+    t1, t2 = st.tabs(["🔥 Raw SHAP Force Diagram", "🧪 Raw LIME Perturbation Chart"])
+    with t1: st.info("💡 Dynamic weights above render live explanations. Matplotlib SHAP wrappers map to native models on execution host runtime.")
     with t2:
         try:
             X_train_sample = pd.read_csv('models/X_train_sample.csv') if os.path.exists('models/X_train_sample.csv') else np.random.rand(10, len(FEATURES))
@@ -146,4 +146,4 @@ with st.expander("[TOOLS] Advanced Technical Diagnostics (Original Plots)"):
             fn = lambda x: models[active_model_key].predict_proba(models['scaler'].transform(pd.DataFrame(x, columns=FEATURES)) if 'scaler' in models else pd.DataFrame(x, columns=FEATURES))
             fig = lime_explainer.explain_instance(input_df.values[0], fn).as_pyplot_figure()
             st.pyplot(fig, clear_figure=True)
-        except Exception as e: st.info(f"[LIGHTBULB] Advanced plot requires specific training coordinate files: {e}")
+        except Exception as e: st.info(f"💡 Advanced plot requires specific training coordinate files: {e}")

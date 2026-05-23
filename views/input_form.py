@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 
-st.markdown("## [FORM] Student Profile Configuration")
+st.markdown("## 📋 Student Profile Configuration")
 st.caption("Load a template configuration or orchestrate your parameters manually below.")
 
 MOCK_PROFILES = {
@@ -24,7 +24,7 @@ MOCK_PROFILES = {
 }
 
 selected_preset = st.selectbox(
-    "[USER] Load a Pre-configured Student Profile for Quick Demo:",
+    "👤 Load a Pre-configured Student Profile for Quick Demo:",
     options=list(MOCK_PROFILES.keys())
 )
 
@@ -38,12 +38,12 @@ def get_val(key, default):
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    st.markdown("### [CHART] Academic Records")
+    st.markdown("### 📊 Academic Records")
     gpa = st.number_input('Cumulative GPA (0.00 - 4.00)', min_value=0.0, max_value=4.0, value=float(get_val('gpa', 3.0)), step=0.01)
     attendance = st.slider('Class Attendance Rate', min_value=0.0, max_value=1.0, value=float(get_val('attendance', 0.85)), format="%.0f%%")
 
 with col2:
-    st.markdown("### [COMPUTER] Engagement Triggers")
+    st.markdown("### 💻 Engagement Triggers")
     engagement_val = float(get_val('engagement', 0.55))
     default_eng_idx = 0 if engagement_val >= 0.8 else (1 if engagement_val >= 0.5 else (2 if engagement_val >= 0.25 else 3))
     
@@ -60,7 +60,7 @@ with col2:
     risk_score = st.slider('Internal Advisor Risk Score', min_value=0.0, max_value=1.0, value=float(get_val('risk_score', 0.30)))
 
 with col3:
-    st.markdown("### [USERS] Demographic Metrics")
+    st.markdown("### 👥 Demographic Metrics")
     income_proxy = st.number_input('Household Income Proxy ($)', min_value=0, max_value=500000, value=int(get_val('income_proxy', 40000)))
     unemployment_rate = st.number_input('Regional Unemployment Rate (%)', min_value=0.0, max_value=100.0, value=float(get_val('Unemployment rate', 5.0)))
     age = st.number_input('Age at Enrollment', min_value=15, max_value=90, value=int(get_val('Age at enrollment', 20)))
