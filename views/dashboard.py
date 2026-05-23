@@ -57,7 +57,9 @@ selected_explain_model_name = st.sidebar.radio("Active Explanation Model:", list
 model_mapping = {"Best Ensemble Model": "best", "Random Forest Classifier": "rf", "XGBoost Predictor": "xgboost"}
 active_model_key = model_mapping[selected_explain_model_name]
 active_model = models[active_model_key]
-active_proba = preds[selected_explain_model_n# Row 1 Dashboard Scoreboard Metric Rendering
+active_proba = preds[selected_explain_model_name]
+
+# Row 1 Dashboard Scoreboard Metric Rendering
 c1, c2, c3 = st.columns([1.5, 2, 1.5], gap="medium")
 
 with c1:
