@@ -1,0 +1,76 @@
+import streamlit as st
+import pandas as pd
+
+st.markdown("## [FORM] Student Profile Configuration")
+st.caption("Load a template configuration or orchestrate your parameters manually below.")
+
+MOCK_PROFILES = {
+    "Custom Profile (Use Interface Controls)": None,
+    "Alex Rivera (High Risk of Attrition)": {
+        'gpa': 1.6, 'attendance': 0.58, 'engagement': 0.32, 'income_proxy': 18000,
+        'low_gpa_flag': 1, 'low_engagement_flag': 1, 'risk_score': 0.82,
+        'Unemployment rate': 8.5, 'Age at enrollment': 23, 'Gender': 1
+    },
+    "Chloe Chen (Stellar Academic Standing)": {
+        'gpa': 3.9, 'attendance': 0.98, 'engagement': 0.95, 'income_proxy': 65000,
+        'low_gpa_flag': 0, 'low_engagement_flag': 0, 'risk_score': 0.08,
+        'Unemployment rate': 4.2, 'Age at enrollment': 18, 'Gender': 0
+    },
+    "Jordan Smith (Borderline Warning)": {
+        'gpa': 2.3, 'attendance': 0.76, 'engagement': 0.55, 'income_proxy': 32000,
+        'low_gpa_flag': 0, 'low_engagement_flag': 0, 'risk_score': 0.48,
+        'Unemployment rate': 5.8, 'Age at enrollment': 21, 'Gender': 1
+    }
+}
+
+selected_preset = st.selectbox(
+    "[USER] Load a Pre-configured Student Profile for Quick Demo:",
+    options=list(MOCK_PROFILES.keys())
+)
+
+preset_values = MOCK_PROFILES[selected_preset]
+def get_val(key, default):
+    if preset_values is not None and key in preset_values:
+        return preset_values[key]
+    return default
+
+# Elegant Main Screen Grid Layout
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    st.markdown("### [CHART] Academic Records")
+    gpa = st.number_input('Cumulative GPA (0.00 - 4.00)', min_value=0.0, max_value=4.0, value=float(get_val('gpa', 3.0)), step=0.01)
+    attendance = st.slider('Class Attendance Rate', min_value=0.0, max_value=1.0, value=float(get_val('attendance', 0.85)), format="%.0f%%")
+
+with col2:
+    st.markdown("### [COMPUTER] Engagement Triggers")
+    engagement_val = float(get_val('engagement', 0.55))
+    default_eng_idx = 0 if engagement_val >= 0.8 else (1 if engagement_val >= 0.5 else (2 if engagement_val >= 0.25 else 3))
+    
+    engagement_desc = st.selectbox(
+        'VLE Digital Engagement Level',
+        options=[
+            "High Engagement (Active Daily & Quizzes) [0.85]",
+            "Medium Engagement (Regular Weekly Logs) [0.55]",
+            "Low Engagement (Infrequent Activity) [0.28]",
+            "Critical Neglect (Rarely Logs In) [0.12]"
+         ], index=default_eng_idx
+    )
+    engagement = 0.85 if "High" in engagement_desc else (0.55 if "Medium" in engagement_desc else (0.28 if "Low" in engagement_desc else 0.12))
+    risk_score = st.slider('Internal Advisor Risk Score', min_value=0.0, max_value=1.0, value=float(get_val('risk_score', 0.30)))
+
+with col3:
+    st.markdown("### [USERS] Demographic Metrics")
+    income_proxy = st.number_input('Household Income Proxy ($)', min_value=0, max_value=500000, value=int(get_val('income_proxy', 40000)))
+    unemployment_rate = st.number_input('Regional Unemployment Rate (%)', min_value=0.0, max_value=100.0, value=float(get_val('Unemployment rate', 5.0)))
+    age = st.number_input('Age at Enrollment', min_value=15, max_value=90, value=int(get_val('Age at enrollment', 20)))
+    gender = st.selectbox('Gender Identity Code', options=[0, 1], index=int(get_val('Gender', 0)), format_func=lambda x: "Male" if x == 1 else "Female")
+
+if st.button("Execute Predictive Matrix Analytics [->]", type="primary"):
+    st.session_state.selected_preset_name = selected_preset
+    st.session_state.student_data = {
+        'gpa': gpa, 'attendance': attendance, 'engagement': engagement, 'income_proxy': income_proxy,
+        'low_gpa_flag': 1 if gpa < 2.0 else 0, 'low_engagement_flag': 1 if engagement < 0.4 else 0,
+        'risk_score': risk_score, 'Unemployment rate': unemployment_rate, 'Age at enrollment': age, 'Gender': gender
+    }
+    st.switch_page("views/dashboard.py")
