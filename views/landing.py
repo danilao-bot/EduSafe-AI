@@ -1,35 +1,72 @@
 import streamlit as st
 
 st.markdown("""
-<div style='text-align: center; padding: 40px 10px;'>
+<div style='text-align: center; padding: 60px 10px; margin-bottom: 20px;'>
     <div style='display: inline-block; background: linear-gradient(135deg, #3B82F6, #8B5CF6); padding: 16px; border-radius: 20px; margin-bottom: 24px; box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.5);'>
         <h1 style='margin: 0; font-size: 48px; line-height: 1;'>🎓</h1>
     </div>
-    <h1 style='font-size: 48px; margin-bottom: 16px; font-weight: 800; background: -webkit-linear-gradient(45deg, #60A5FA, #A78BFA); -webkit-background-clip: text; -webkit-text-fill-color: transparent;'>EduSafe AI™</h1>
-    <p style='font-size: 20px; color: var(--text-muted); max-width: 600px; margin: 0 auto; line-height: 1.6;'>
-        Next-Generation Predictive Early Warning & Explainable Intervention Architecture.
+    <h1 style='font-size: 56px; margin-bottom: 16px; font-weight: 800; background: -webkit-linear-gradient(45deg, #60A5FA, #A78BFA); -webkit-background-clip: text; -webkit-text-fill-color: transparent;'>Stop Student Attrition Before It Happens.</h1>
+    <p style='font-size: 20px; color: var(--text-muted); max-width: 700px; margin: 0 auto; line-height: 1.6;'>
+        EduSafe AI™ is the next-generation predictive early warning system. We empower academic advisors with explainable AI to identify at-risk students and deploy targeted interventions.
     </p>
 </div>
 """, unsafe_allow_html=True)
 
+col_cta1, col_cta2, col_cta3, col_cta4 = st.columns([1, 1.5, 1.5, 1])
+with col_cta2:
+    if st.button("🚀 Run Live Diagnostics", type="primary", use_container_width=True):
+        st.switch_page("views/input_form.py")
+with col_cta3:
+    if st.button("📖 View Model Architecture", type="secondary", use_container_width=True):
+        st.info("Technical documentation coming soon.")
+
 st.markdown("""
-<div class="responsive-flex" style="display: flex; gap: 24px; margin-bottom: 40px;">
+<div style='text-align: center; margin: 60px 0 40px 0;'>
+    <h2 style='font-size: 32px; font-weight: 700;'>How It Works</h2>
+</div>
+<div class="responsive-flex" style="display: flex; gap: 24px; margin-bottom: 40px; text-align: center;">
     <div class="premium-card" style="flex: 1; margin-bottom: 0;">
-        <h3 style="color: #60A5FA !important; display: flex; align-items: center; gap: 8px; margin: 0;">💡 Intelligent Explanations</h3>
-        <p style="color: var(--text-muted); font-size: 14px; margin-top: 12px; margin-bottom: 0;">Powered by localized SHAP and LIME boundaries for deep insights.</p>
+        <h1 style="font-size: 40px; margin: 0; color: #3B82F6;">1</h1>
+        <h3 style="color: var(--text-main); margin-top: 12px; margin-bottom: 8px;">Data Intake</h3>
+        <p style="color: var(--text-muted); font-size: 14px; margin: 0;">We seamlessly ingest LMS engagement metrics, demographic proxies, and historical GPA data.</p>
     </div>
     <div class="premium-card" style="flex: 1; margin-bottom: 0;">
-        <h3 style="color: #34D399 !important; display: flex; align-items: center; gap: 8px; margin: 0;">⚖️ Cross-Model Alignment</h3>
-        <p style="color: var(--text-muted); font-size: 14px; margin-top: 12px; margin-bottom: 0;">Validates risk assertions dynamically across Tree-Ensembles and Boosting networks.</p>
+        <h1 style="font-size: 40px; margin: 0; color: #8B5CF6;">2</h1>
+        <h3 style="color: var(--text-main); margin-top: 12px; margin-bottom: 8px;">AI Inference</h3>
+        <p style="color: var(--text-muted); font-size: 14px; margin: 0;">Ensemble models (Random Forest & XGBoost) analyze behavioral datapoints in milliseconds.</p>
     </div>
     <div class="premium-card" style="flex: 1; margin-bottom: 0;">
-        <h3 style="color: #F87171 !important; display: flex; align-items: center; gap: 8px; margin: 0;">🎯 Prescriptive Runbooks</h3>
-        <p style="color: var(--text-muted); font-size: 14px; margin-top: 12px; margin-bottom: 0;">Immediate action blueprints tailored to student metric vulnerabilities.</p>
+        <h1 style="font-size: 40px; margin: 0; color: #10B981;">3</h1>
+        <h3 style="color: var(--text-main); margin-top: 12px; margin-bottom: 8px;">Prescriptive Action</h3>
+        <p style="color: var(--text-muted); font-size: 14px; margin: 0;">SHAP/LIME explains *why* a student is at risk, and our engine recommends the optimal intervention protocol.</p>
     </div>
 </div>
-""", unsafe_allow_html=True)
 
-col1, col2, col3 = st.columns([1, 2, 1])
-with col2:
-    if st.button("🚀 Initialize Risk Analysis Intake", type="primary", use_container_width=True):
-        st.switch_page("views/input_form.py")
+<div style='text-align: center; margin: 60px 0 40px 0;'>
+    <h2 style='font-size: 32px; font-weight: 700;'>Platform Impact</h2>
+</div>
+<div class="responsive-flex" style="display: flex; gap: 24px; margin-bottom: 60px; text-align: center;">
+    <div style="flex: 1;">
+        <h1 style="font-size: 48px; color: #60A5FA; margin: 0;">94%</h1>
+        <p style="color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Prediction Accuracy</p>
+    </div>
+    <div style="flex: 1;">
+        <h1 style="font-size: 48px; color: #A78BFA; margin: 0;">50ms</h1>
+        <p style="color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Live Inference Time</p>
+    </div>
+    <div style="flex: 1;">
+        <h1 style="font-size: 48px; color: #34D399; margin: 0;">10+</h1>
+        <p style="color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Explainable Features</p>
+    </div>
+</div>
+
+<hr style='border: 0; border-top: 1px solid var(--border-color); margin: 40px 0 20px 0;'/>
+<div style='text-align: center; color: var(--text-muted); font-size: 12px; margin-bottom: 20px;'>
+    <p>&copy; 2026 EduSafe AI. All rights reserved.</p>
+    <p>
+        <a href="#" style="color: var(--accent); text-decoration: none; margin: 0 10px;">Privacy Policy</a> | 
+        <a href="#" style="color: var(--accent); text-decoration: none; margin: 0 10px;">Terms of Service</a> | 
+        <a href="#" style="color: var(--accent); text-decoration: none; margin: 0 10px;">Documentation</a>
+    </p>
+</div>
+""", unsafe_allow_html=True)

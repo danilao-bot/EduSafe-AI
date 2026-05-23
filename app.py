@@ -1,4 +1,5 @@
 import streamlit as st
+import streamlit.components.v1 as components
 import os
 import joblib
 import pickle
@@ -90,8 +91,36 @@ st.markdown("""
             padding: 16px;
         }
     }
+    
+    /* Sidebar Styling */
+    [data-testid="stSidebar"] {
+        background-color: var(--bg-color) !important;
+        border-right: 1px solid var(--border-color);
+    }
     </style>
     """, unsafe_allow_html=True)
+
+# Inject Open Graph Meta Tags for SEO/Social Sharing
+components.html("""
+<script>
+    if(!document.querySelector("meta[property='og:title']")) {
+        const ogTitle = document.createElement('meta');
+        ogTitle.setAttribute('property', 'og:title');
+        ogTitle.setAttribute('content', 'EduSafe AI - Student Success Portal');
+        document.head.appendChild(ogTitle);
+
+        const ogDesc = document.createElement('meta');
+        ogDesc.setAttribute('property', 'og:description');
+        ogDesc.setAttribute('content', 'Identify at-risk students before they drop out. Predictive AI built for advisors.');
+        document.head.appendChild(ogDesc);
+        
+        const ogType = document.createElement('meta');
+        ogType.setAttribute('property', 'og:type');
+        ogType.setAttribute('content', 'website');
+        document.head.appendChild(ogType);
+    }
+</script>
+""", height=0, width=0)
 
 # Cache resource allocation across page loads
 @st.cache_resource

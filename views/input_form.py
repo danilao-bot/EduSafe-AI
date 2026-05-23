@@ -33,7 +33,7 @@ selected_preset = st.selectbox(
 )
 
 preset_values = MOCK_PROFILES[selected_preset]
-def get_val(key, default):
+def get_val(key, default=None):
     if preset_values is not None and key in preset_values:
         return preset_values[key]
     return default
@@ -43,13 +43,16 @@ col1, col2, col3 = st.columns(3, gap="medium")
 
 with col1:
     st.markdown("### 📊 Academic Records")
-    gpa = st.number_input('Current GPA', min_value=0.0, max_value=4.0, value=float(get_val('gpa', 3.0)), step=0.01, help="The student's overall grade point average out of 4.0")
-    attendance = st.slider('Attendance Percentage', min_value=0.0, max_value=1.0, value=float(get_val('attendance', 0.85)), format="%.0f%%", help="What percentage of classes has the student attended so far?")
+    gpa_val = get_val('gpa')
+    gpa = st.number_input('Current GPA', min_value=0.0, max_value=4.0, value=float(gpa_val) if gpa_val is not None else None, step=0.01, help="The student's overall grade point average out of 4.0")
+    
+    att_val = get_val('attendance', 0.0)
+    attendance = st.slider('Attendance Percentage', min_value=0.0, max_value=1.0, value=float(att_val), format="%.0f%%", help="What percentage of classes has the student attended so far?")
 
 with col2:
     st.markdown("### 💻 Engagement Triggers")
-    engagement_val = float(get_val('engagement', 0.55))
-    default_eng_idx = 0 if engagement_val >= 0.8 else (1 if engagement_val >= 0.5 else (2 if engagement_val >= 0.25 else 3))
+    engagement_val = get_val('engagement')
+    default_eng_idx = None if engagement_val is None else (0 if engagement_val >= 0.8 else (1 if engagement_val >= 0.5 else (2 if engagement_val >= 0.25 else 3)))
     
     engagement_desc = st.selectbox(
         'Online Course Activity',
@@ -61,25 +64,35 @@ with col2:
          ], index=default_eng_idx,
          help="How often does the student log into the online portal, view materials, or submit assignments?"
     )
-    engagement = 0.85 if "Very Active" in engagement_desc else (0.55 if "Moderately Active" in engagement_desc else (0.28 if "Rarely Active" in engagement_desc else 0.12))
-    risk_score = st.slider("Counselor's Initial Concern", min_value=0.0, max_value=1.0, value=float(get_val('risk_score', 0.30)), help="Your personal gut-feeling or initial assessment of the student's risk level before running the AI")
+    engagement = None if engagement_desc is None else (0.85 if "Very Active" in engagement_desc else (0.55 if "Moderately Active" in engagement_desc else (0.28 if "Rarely Active" in engagement_desc else 0.12)))
+    risk_score = st.slider("Counselor's Initial Concern", min_value=0.0, max_value=1.0, value=float(get_val('risk_score', 0.0)), help="Your personal gut-feeling or initial assessment of the student's risk level before running the AI")
 
 with col3:
     st.markdown("### 👥 Demographic Metrics")
-    income_proxy = st.number_input('Estimated Family Income ($)', min_value=0, max_value=500000, value=int(get_val('income_proxy', 40000)))
-    unemployment_rate = st.number_input('Local Unemployment Rate (%)', min_value=0.0, max_value=100.0, value=float(get_val('Unemployment rate', 5.0)), help="The unemployment rate in the student's home city/region")
-    age = st.number_input('Starting Age', min_value=15, max_value=90, value=int(get_val('Age at enrollment', 20)))
-    gender = st.selectbox('Student Gender', options=[0, 1], index=int(get_val('Gender', 0)), format_func=lambda x: "Male" if x == 1 else "Female")
+    inc_val = get_val('income_proxy')
+    income_proxy = st.number_input('Estimated Family Income ($)', min_value=0, max_value=500000, value=int(inc_val) if inc_val is not None else None)
+    
+    unemp_val = get_val('Unemployment rate')
+    unemployment_rate = st.number_input('Local Unemployment Rate (%)', min_value=0.0, max_value=100.0, value=float(unemp_val) if unemp_val is not None else None, help="The unemployment rate in the student's home city/region")
+    
+    age_val = get_val('Age at enrollment')
+    age = st.number_input('Starting Age', min_value=15, max_value=90, value=int(age_val) if age_val is not None else None)
+    
+    gender_val = get_val('Gender')
+    gender = st.selectbox('Student Gender', options=[0, 1], index=int(gender_val) if gender_val is not None else None, format_func=lambda x: "Male" if x == 1 else "Female")
 
 st.markdown("<br/>", unsafe_allow_html=True)
 col_btn1, col_btn2, col_btn3 = st.columns([1, 2, 1])
 
 with col_btn2:
     if st.button("🚀 Execute Predictive Analytics", type="primary", use_container_width=True):
-        st.session_state.selected_preset_name = selected_preset
-        st.session_state.student_data = {
-            'gpa': gpa, 'attendance': attendance, 'engagement': engagement, 'income_proxy': income_proxy,
-            'low_gpa_flag': 1 if gpa < 2.0 else 0, 'low_engagement_flag': 1 if engagement < 0.4 else 0,
-            'risk_score': risk_score, 'Unemployment rate': unemployment_rate, 'Age at enrollment': age, 'Gender': gender
-        }
-        st.switch_page("views/dashboard.py")
+        if None in [gpa, engagement, income_proxy, unemployment_rate, age, gender]:
+            st.error("⚠️ Please fill out all configuration fields to run the diagnostics.")
+        else:
+            st.session_state.selected_preset_name = selected_preset
+            st.session_state.student_data = {
+                'gpa': gpa, 'attendance': attendance, 'engagement': engagement, 'income_proxy': income_proxy,
+                'low_gpa_flag': 1 if gpa < 2.0 else 0, 'low_engagement_flag': 1 if engagement < 0.4 else 0,
+                'risk_score': risk_score, 'Unemployment rate': unemployment_rate, 'Age at enrollment': age, 'Gender': gender
+            }
+            st.switch_page("views/dashboard.py")

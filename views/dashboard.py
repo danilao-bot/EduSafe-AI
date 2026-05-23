@@ -32,6 +32,18 @@ feature_display_names = {
 input_df = pd.DataFrame(data, index=[0])
 input_scaled = pd.DataFrame(models['scaler'].transform(input_df), columns=FEATURES) if 'scaler' in models else input_df
 
+col_title, col_export = st.columns([3, 1], gap="medium")
+with col_title:
+    st.markdown("## 📊 Analytics & Interventions Dashboard")
+with col_export:
+    st.download_button(
+        label="📥 Export Report (CSV)",
+        data=input_df.to_csv(index=False),
+        file_name=f"edusafe_report_{data['Age at enrollment']}.csv",
+        mime="text/csv",
+        use_container_width=True
+    )
+
 # Evaluate Model Predictions
 preds = {}
 for name, m_key in [("Best Ensemble Model", "best"), ("Random Forest Classifier", "rf"), ("XGBoost Predictor", "xgboost")]:
