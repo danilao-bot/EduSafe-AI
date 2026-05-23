@@ -43,8 +43,8 @@ col1, col2, col3 = st.columns(3, gap="medium")
 
 with col1:
     st.markdown("### 📊 Academic Records")
-    gpa = st.number_input('Cumulative GPA (0.00 - 4.00)', min_value=0.0, max_value=4.0, value=float(get_val('gpa', 3.0)), step=0.01)
-    attendance = st.slider('Class Attendance Rate', min_value=0.0, max_value=1.0, value=float(get_val('attendance', 0.85)), format="%.0f%%")
+    gpa = st.number_input('Current GPA', min_value=0.0, max_value=4.0, value=float(get_val('gpa', 3.0)), step=0.01, help="The student's overall grade point average out of 4.0")
+    attendance = st.slider('Attendance Percentage', min_value=0.0, max_value=1.0, value=float(get_val('attendance', 0.85)), format="%.0f%%", help="What percentage of classes has the student attended so far?")
 
 with col2:
     st.markdown("### 💻 Engagement Triggers")
@@ -52,23 +52,24 @@ with col2:
     default_eng_idx = 0 if engagement_val >= 0.8 else (1 if engagement_val >= 0.5 else (2 if engagement_val >= 0.25 else 3))
     
     engagement_desc = st.selectbox(
-        'VLE Digital Engagement Level',
+        'Online Course Activity',
         options=[
-            "High Engagement (Active Daily & Quizzes) [0.85]",
-            "Medium Engagement (Regular Weekly Logs) [0.55]",
-            "Low Engagement (Infrequent Activity) [0.28]",
-            "Critical Neglect (Rarely Logs In) [0.12]"
-         ], index=default_eng_idx
+            "Very Active (Daily logins, completes quizzes)",
+            "Moderately Active (Logs in weekly)",
+            "Rarely Active (Logs in infrequently)",
+            "Inactive (Hardly ever logs in)"
+         ], index=default_eng_idx,
+         help="How often does the student log into the online portal, view materials, or submit assignments?"
     )
-    engagement = 0.85 if "High" in engagement_desc else (0.55 if "Medium" in engagement_desc else (0.28 if "Low" in engagement_desc else 0.12))
-    risk_score = st.slider('Internal Advisor Risk Score', min_value=0.0, max_value=1.0, value=float(get_val('risk_score', 0.30)))
+    engagement = 0.85 if "Very Active" in engagement_desc else (0.55 if "Moderately Active" in engagement_desc else (0.28 if "Rarely Active" in engagement_desc else 0.12))
+    risk_score = st.slider("Counselor's Initial Concern", min_value=0.0, max_value=1.0, value=float(get_val('risk_score', 0.30)), help="Your personal gut-feeling or initial assessment of the student's risk level before running the AI")
 
 with col3:
     st.markdown("### 👥 Demographic Metrics")
-    income_proxy = st.number_input('Household Income Proxy ($)', min_value=0, max_value=500000, value=int(get_val('income_proxy', 40000)))
-    unemployment_rate = st.number_input('Regional Unemployment Rate (%)', min_value=0.0, max_value=100.0, value=float(get_val('Unemployment rate', 5.0)))
-    age = st.number_input('Age at Enrollment', min_value=15, max_value=90, value=int(get_val('Age at enrollment', 20)))
-    gender = st.selectbox('Gender Identity Code', options=[0, 1], index=int(get_val('Gender', 0)), format_func=lambda x: "Male" if x == 1 else "Female")
+    income_proxy = st.number_input('Estimated Family Income ($)', min_value=0, max_value=500000, value=int(get_val('income_proxy', 40000)))
+    unemployment_rate = st.number_input('Local Unemployment Rate (%)', min_value=0.0, max_value=100.0, value=float(get_val('Unemployment rate', 5.0)), help="The unemployment rate in the student's home city/region")
+    age = st.number_input('Starting Age', min_value=15, max_value=90, value=int(get_val('Age at enrollment', 20)))
+    gender = st.selectbox('Student Gender', options=[0, 1], index=int(get_val('Gender', 0)), format_func=lambda x: "Male" if x == 1 else "Female")
 
 st.markdown("<br/>", unsafe_allow_html=True)
 col_btn1, col_btn2, col_btn3 = st.columns([1, 2, 1])
