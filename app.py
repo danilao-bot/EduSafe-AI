@@ -6,7 +6,7 @@ import pickle
 # Must be the very first Streamlit command executed
 st.set_page_config(
     page_title="EduSafe AI - Student Success Portal",
-    page_icon="school",
+    page_icon="🎓",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -71,9 +71,9 @@ def load_models():
 st.session_state.models = load_models()
 
 # Core Navigation Definitions
-landing_page = st.Page("views/landing.py", title="System Welcome", icon="home", default=True)
-form_page = st.Page("views/input_form.py", title="Student Profile Setup", icon="description")
-dashboard_page = st.Page("views/dashboard.py", title="Analytics & Interventions", icon="analytics")
+landing_page = st.Page("views/landing.py", title="System Welcome", icon="🏠", default=True)
+form_page = st.Page("views/input_form.py", title="Student Profile Setup", icon="📋")
+dashboard_page = st.Page("views/dashboard.py", title="Analytics & Interventions", icon="📊")
 
 pg = st.navigation({
     "Navigation": [landing_page, form_page, dashboard_page]
