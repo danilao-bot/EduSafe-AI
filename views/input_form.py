@@ -9,7 +9,7 @@ from utils import convert_usd_to_naira
 
 st.markdown("""
 <div style="text-align: center; margin-bottom: 30px;">
-    <h2 style="font-size: 36px; margin-bottom: 8px; color: var(--text-main) !important;">📋 Student Profile Setup</h2>
+    <h2 style="font-size: 36px; margin-bottom: 8px; color: var(--text-main) !important;">Student Profile Setup</h2>
     <p style="color: var(--text-muted); font-size: 16px;">Load a pre-configured template or fill in the student's details manually below.</p>
 </div>
 """, unsafe_allow_html=True)
@@ -44,11 +44,22 @@ def get_val(key, default=None):
         return preset_values[key]
     return default
 
-# ── Main Input Grid ──────────────────────────────────────────────────────────
-col1, col2, col3 = st.columns(3, gap="medium")
+# ── Main Input Grid ──────────────────────────────────────────────────────────st.markdown("""
+<style>
+    @media (max-width: 640px) {
+        .input-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+    }
+    @media (min-width: 641px) and (max-width: 1024px) {
+        .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    }
+    @media (min-width: 1025px) {
+        .input-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+    }
+</style>
+""", unsafe_allow_html=True)col1, col2, col3 = st.columns(3, gap="medium")
 
 with col1:
-    st.markdown("### 📊 Academic Records")
+    st.markdown("### Academic Records")
 
     gpa_val = get_val('gpa')
     gpa = st.number_input(
@@ -73,7 +84,7 @@ with col1:
         st.caption(f"📌 {attendance_pct}% of classes attended")
 
 with col2:
-    st.markdown("### 💻 Engagement & Concern")
+    st.markdown("### Engagement & Concern")
 
     engagement_val = get_val('engagement')
     default_eng_idx = None if engagement_val is None else (
@@ -115,11 +126,11 @@ with col2:
     st.caption(f"{concern_label} (Score: {risk_score_display}/10)")
 
 with col3:
-    st.markdown("### 👥 Background Details")
+    st.markdown("### Background Details")
 
     inc_val = get_val('income_proxy')
     income_proxy = st.number_input(
-        'Estimated Family Income (USD)',
+        'Estimated Family Income (NGN)',
         min_value=0, max_value=500000,
         value=int(inc_val) if inc_val is not None else None,
         help="Approximate annual household income in US dollars"
@@ -154,7 +165,7 @@ st.markdown("<br/>", unsafe_allow_html=True)
 col_btn1, col_btn2, col_btn3 = st.columns([1, 2, 1])
 
 with col_btn2:
-    if st.button("🚀 Run Risk Analysis", type="primary", use_container_width=True):
+    if st.button("Run Risk Analysis", type="primary", use_container_width=True):
         missing = []
         if gpa is None: missing.append("Current GPA")
         if engagement is None: missing.append("Online Course Activity")
@@ -164,7 +175,7 @@ with col_btn2:
         if gender is None: missing.append("Student Gender")
 
         if missing:
-            st.error(f"⚠️ Please fill in the following fields before running: **{', '.join(missing)}**")
+            st.error(f"Please fill in the following fields before running: **{', '.join(missing)}**")
         else:
             # Convert attendance from 0–100 integer → 0.0–1.0 ratio for the model
             attendance_ratio = attendance_pct / 100.0

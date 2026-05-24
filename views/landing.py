@@ -10,8 +10,12 @@ st.markdown("""
         .hero-subtitle {
             font-size: 16px !important;
         }
-        .hero-icon {
-            font-size: 40px !important;
+        .hero-stats {
+            flex-direction: column !important;
+            gap: 12px !important;
+        }
+        .hero-stat-item {
+            font-size: 13px !important;
         }
         .hero-padding {
             padding: 40px 16px !important;
@@ -43,11 +47,14 @@ st.markdown("""
     }
     
     .hero-icon {
-        display: inline-block;
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 24px;
         background: linear-gradient(135deg, #3B82F6, #8B5CF6);
-        padding: 12px;
         border-radius: 20px;
-        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.5);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
@@ -69,17 +76,68 @@ st.markdown("""
     .hero-subtitle {
         color: var(--text-muted);
         max-width: 700px;
-        margin: 0 auto;
+        margin: 0 auto 20px;
         line-height: 1.6;
+    }
+    
+    .hero-stats {
+        display: flex;
+        justify-content: center;
+        gap: 24px;
+        flex-wrap: wrap;
+        margin: 20px 0;
+        padding: 16px;
+        background: rgba(59, 130, 246, 0.08);
+        border-radius: 12px;
+    }
+    
+    .hero-stat-item {
+        text-align: center;
+        font-size: 14px;
+    }
+    
+    .hero-stat-value {
+        font-size: 24px;
+        font-weight: 700;
+        background: -webkit-linear-gradient(45deg, #60A5FA, #A78BFA);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    
+    .hero-stat-label {
+        color: var(--text-muted);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-top: 4px;
     }
 </style>
 
 <div class='hero-padding' style='text-align: center; margin-bottom: 20px;'>
-    <div class='hero-icon' style='line-height: 1;'>🎓</div>
-    <h1 class='hero-title'>Stop Student Attrition Before It Happens.</h1>
+    <div class='hero-icon'>
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 1L2 6V11C2 17.6 12 24 12 24S22 17.6 22 11V6L12 1Z" stroke="#93C5FD" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <path d="M8 12L11 15L16 10" stroke="#93C5FD" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </div>
+    <h1 class='hero-title'>Stop Student Attrition Before It Happens</h1>
     <p class='hero-subtitle'>
-        EduSafe AI™ is the next-generation predictive early warning system. We empower academic advisors with explainable AI to identify at-risk students and deploy targeted interventions.
+        EduSafe AI™ is the next-generation predictive early warning system. We empower academic advisors with explainable AI to identify at-risk students and deploy targeted interventions before it's too late.
     </p>
+    <div class='hero-stats'>
+        <div class='hero-stat-item'>
+            <div class='hero-stat-value'>94%</div>
+            <div class='hero-stat-label'>Accuracy</div>
+        </div>
+        <div class='hero-stat-item'>
+            <div class='hero-stat-value'>50ms</div>
+            <div class='hero-stat-label'>Speed</div>
+        </div>
+        <div class='hero-stat-item'>
+            <div class='hero-stat-value'>10+</div>
+            <div class='hero-stat-label'>Explainable Features</div>
+        </div>
+    </div>
 </div>
 """, unsafe_allow_html=True)
 
@@ -112,11 +170,11 @@ st.markdown("""
 
 col1, col2 = st.columns([1, 1])
 with col1:
-    if st.button("🚀 Run Live Diagnostics", type="primary", use_container_width=True, key="cta_diagnostics"):
+    if st.button("Run Live Diagnostics", type="primary", use_container_width=True, key="cta_diagnostics"):
         st.switch_page("views/input_form.py")
 with col2:
-    if st.button("📖 Documentation", type="secondary", use_container_width=True, key="cta_docs"):
-        st.info("📚 Complete technical documentation and API reference coming soon.")
+    if st.button("Documentation", type="secondary", use_container_width=True, key="cta_docs"):
+        st.info("Complete technical documentation and API reference coming soon.")
 
 st.markdown("</div>", unsafe_allow_html=True)
 
@@ -214,7 +272,7 @@ st.markdown("""
 </style>
 
 <div class='how-it-works-container'>
-    <div class='how-it-works-title'>🔄 How It Works</div>
+    <div class='how-it-works-title'>Process Overview</div>
     <div class='process-cards-grid'>
 """, unsafe_allow_html=True)
 
@@ -223,12 +281,10 @@ st.markdown("""
         <div class="premium-card process-card">
             <div class="icon-box" style="background: linear-gradient(135deg, #1E3A5F, #3B82F6);">
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <ellipse cx="12" cy="5" rx="9" ry="3" stroke="#93C5FD" stroke-width="1.5"/>
-                    <path d="M3 5v5c0 1.657 4.029 3 9 3s9-1.343 9-3V5" stroke="#93C5FD" stroke-width="1.5"/>
-                    <path d="M3 10v5c0 1.657 4.029 3 9 3s9-1.343 9-3v-5" stroke="#93C5FD" stroke-width="1.5"/>
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z" fill="#93C5FD"/>
                 </svg>
             </div>
-            <h3 class="process-title">📥 Data Intake</h3>
+            <h3 class="process-title">Data Intake</h3>
             <p class="process-description">We ingest LMS engagement metrics, demographic proxies, and historical GPA data in real-time.</p>
         </div>
 """, unsafe_allow_html=True)
@@ -238,14 +294,10 @@ st.markdown("""
         <div class="premium-card process-card">
             <div class="icon-box" style="background: linear-gradient(135deg, #2E1065, #8B5CF6);">
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="4" y="4" width="16" height="16" rx="2" stroke="#C4B5FD" stroke-width="1.5"/>
-                    <path d="M9 9h6M9 12h6M9 15h4" stroke="#C4B5FD" stroke-width="1.5" stroke-linecap="round"/>
-                    <circle cx="7" cy="9" r="1" fill="#C4B5FD"/>
-                    <circle cx="7" cy="12" r="1" fill="#C4B5FD"/>
-                    <circle cx="7" cy="15" r="1" fill="#C4B5FD"/>
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="#C4B5FD"/>
                 </svg>
             </div>
-            <h3 class="process-title">🧠 AI Inference</h3>
+            <h3 class="process-title">AI Inference</h3>
             <p class="process-description">Ensemble models (Random Forest & XGBoost) analyze behavioural datapoints in milliseconds.</p>
         </div>
 """, unsafe_allow_html=True)
@@ -255,13 +307,10 @@ st.markdown("""
         <div class="premium-card process-card">
             <div class="icon-box" style="background: linear-gradient(135deg, #052E16, #10B981);">
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="12" cy="12" r="9" stroke="#6EE7B7" stroke-width="1.5"/>
-                    <circle cx="12" cy="12" r="4" stroke="#6EE7B7" stroke-width="1.5"/>
-                    <circle cx="12" cy="12" r="1" fill="#6EE7B7"/>
-                    <path d="M12 2v3M12 19v3M2 12h3M19 12h3" stroke="#6EE7B7" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S15.33 8 14.5 8 13 8.67 13 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S8.33 8 7.5 8 6 8.67 6 9.5 6.67 11 7.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z" fill="#6EE7B7"/>
                 </svg>
             </div>
-            <h3 class="process-title">🎯 Prescriptive Action</h3>
+            <h3 class="process-title">Prescriptive Action</h3>
             <p class="process-description">SHAP & LIME explain why a student is at risk, recommending optimal intervention plans.</p>
         </div>
     </div>
@@ -350,7 +399,7 @@ st.markdown("""
 </style>
 
 <div class='impact-container'>
-    <div class='impact-title'>📈 Platform Impact</div>
+    <div class='impact-title'>Platform Impact</div>
     <div class='metrics-grid'>
         <div class='metric-card premium-card'>
             <h1 class='metric-value'>94%</h1>
@@ -423,9 +472,12 @@ st.markdown("""
         transform: translateX(4px);
     }
     
-    .feature-emoji {
-        font-size: 24px;
-        margin-right: 10px;
+    .feature-icon {
+        display: inline-block;
+        width: 32px;
+        height: 32px;
+        margin-right: 12px;
+        vertical-align: middle;
     }
     
     .feature-title {
@@ -443,25 +495,36 @@ st.markdown("""
 </style>
 
 <div class='features-container'>
-    <div class='features-title'>✨ Key Features</div>
+    <div class='features-title'>Key Features</div>
     <div class='features-grid'>
         <div class='feature-item'>
-            <span class='feature-emoji'>🔍</span>
+            <svg class='feature-icon' viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="10" stroke="#60A5FA" stroke-width="1.5"/>
+                <path d="M12 6v6M12 12l4 2" stroke="#60A5FA" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
             <p class='feature-title'>Real-Time Explainability</p>
             <p class='feature-description'>Understand exactly why each prediction is made using SHAP and LIME interpretability engines.</p>
         </div>
         <div class='feature-item'>
-            <span class='feature-emoji'>⚡</span>
+            <svg class='feature-icon' viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="#60A5FA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
             <p class='feature-title'>Lightning-Fast Inference</p>
             <p class='feature-description'>Get predictions in 50ms or less. Instant insights for every student interaction.</p>
         </div>
         <div class='feature-item'>
-            <span class='feature-emoji'>🎯</span>
+            <svg class='feature-icon' viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="9" stroke="#60A5FA" stroke-width="1.5"/>
+                <path d="M12 8v4l3 2" stroke="#60A5FA" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
             <p class='feature-title'>Personalized Interventions</p>
             <p class='feature-description'>Receive AI-driven recommendations tailored to each student's unique risk profile.</p>
         </div>
         <div class='feature-item'>
-            <span class='feature-emoji'>📊</span>
+            <svg class='feature-icon' viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="3" y="3" width="18" height="18" rx="2" stroke="#60A5FA" stroke-width="1.5"/>
+                <path d="M3 9h18M9 3v18M15 3v18" stroke="#60A5FA" stroke-width="1.5"/>
+            </svg>
             <p class='feature-title'>Multi-Model Ensemble</p>
             <p class='feature-description'>Robust predictions from Random Forest and XGBoost working together for accuracy.</p>
         </div>
