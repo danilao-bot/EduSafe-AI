@@ -44,7 +44,8 @@ def get_val(key, default=None):
         return preset_values[key]
     return default
 
-# ── Main Input Grid ──────────────────────────────────────────────────────────st.markdown("""
+# ── Main Input Grid ──────────────────────────────────────────────────────────
+st.markdown("""
 <style>
     @media (max-width: 640px) {
         .input-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
@@ -56,7 +57,9 @@ def get_val(key, default=None):
         .input-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
     }
 </style>
-""", unsafe_allow_html=True)col1, col2, col3 = st.columns(3, gap="medium")
+""", unsafe_allow_html=True)
+
+col1, col2, col3 = st.columns(3, gap="medium")
 
 with col1:
     st.markdown("### Academic Records")
