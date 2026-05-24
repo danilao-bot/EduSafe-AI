@@ -2,6 +2,11 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import os
+import sys
+
+# Add parent directory to path to import utils
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from utils import convert_usd_to_naira, convert_naira_to_usd, format_naira, employment_status_display
 
 # ── Route Guard ───────────────────────────────────────────────────────────────
 if not st.session_state.get("student_data"):
@@ -42,13 +47,13 @@ models  = st.session_state.get("models", {})
 preset_display_name = st.session_state.get("selected_preset_name", "Custom Profile").split(" (")[0]
 
 FEATURES = ['gpa', 'attendance', 'engagement', 'income_proxy', 'low_gpa_flag',
-            'low_engagement_flag', 'risk_score', 'Unemployment rate', 'Age at enrollment', 'Gender']
+            'low_engagement_flag', 'risk_score', 'employment_status', 'Age at enrollment', 'Gender']
 
 feature_display_names = {
     'gpa': 'GPA', 'attendance': 'Attendance', 'engagement': 'Online Engagement',
     'income_proxy': 'Family Income', 'low_gpa_flag': 'Low GPA Flag',
     'low_engagement_flag': 'Low Engagement Flag', 'risk_score': "Counselor's Concern",
-    'Unemployment rate': 'Local Unemployment', 'Age at enrollment': 'Enrollment Age', 'Gender': 'Gender'
+    'employment_status': 'Employment Status', 'Age at enrollment': 'Enrollment Age', 'Gender': 'Gender'
 }
 
 # ── Safe Data Preparation ─────────────────────────────────────────────────────
@@ -126,7 +131,7 @@ with c1:
             <div>GPA:<br/><b>{data.get('gpa', 0):.2f}</b></div>
             <div>ATTENDANCE:<br/><b>{att_display}</b></div>
             <div>ENGAGEMENT:<br/><b>{data.get('engagement', 0):.1%}</b></div>
-            <div>INCOME:<br/><b>${data.get('income_proxy', 0):,}</b></div>
+            <div>INCOME:<br/><b>{format_naira(data.get('income_proxy', 0))}</b></div>
         </div>
     </div></div>""", unsafe_allow_html=True)
 
@@ -191,7 +196,9 @@ with col_exp_left:
                     if attr['feature'] in ['attendance', 'engagement']:
                         val_str = f"{val:.1%}" if val is not None else "N/A"
                     elif attr['feature'] == 'income_proxy':
-                        val_str = f"${int(val):,}" if val is not None else "N/A"
+                        val_str = format_naira(val) if val is not None else "N/A"
+                    elif attr['feature'] == 'employment_status':
+                        val_str = employment_status_display(val) if val is not None else "N/A"
                     else:
                         val_str = str(val) if val is not None else "N/A"
                     bar_w = min(100, int(abs(attr['weight']) * 200))

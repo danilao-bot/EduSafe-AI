@@ -1,5 +1,11 @@
 import streamlit as st
 import pandas as pd
+import sys
+import os
+
+# Add parent directory to path to import utils
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from utils import convert_usd_to_naira
 
 st.markdown("""
 <div style="text-align: center; margin-bottom: 30px;">
@@ -13,17 +19,17 @@ MOCK_PROFILES = {
     "Alex Rivera (High Risk of Attrition)": {
         'gpa': 1.6, 'attendance': 58, 'engagement': 0.32, 'income_proxy': 18000,
         'low_gpa_flag': 1, 'low_engagement_flag': 1, 'risk_score': 8,
-        'Unemployment rate': 8.5, 'Age at enrollment': 23, 'Gender': 1
+        'employment_status': 1, 'Age at enrollment': 23, 'Gender': 1
     },
     "Chloe Chen (Stellar Academic Standing)": {
         'gpa': 3.9, 'attendance': 98, 'engagement': 0.95, 'income_proxy': 65000,
         'low_gpa_flag': 0, 'low_engagement_flag': 0, 'risk_score': 1,
-        'Unemployment rate': 4.2, 'Age at enrollment': 18, 'Gender': 0
+        'employment_status': 0, 'Age at enrollment': 18, 'Gender': 0
     },
     "Jordan Smith (Borderline Warning)": {
         'gpa': 2.3, 'attendance': 76, 'engagement': 0.55, 'income_proxy': 32000,
         'low_gpa_flag': 0, 'low_engagement_flag': 0, 'risk_score': 5,
-        'Unemployment rate': 5.8, 'Age at enrollment': 21, 'Gender': 1
+        'employment_status': 1, 'Age at enrollment': 21, 'Gender': 1
     }
 }
 
@@ -113,18 +119,19 @@ with col3:
 
     inc_val = get_val('income_proxy')
     income_proxy = st.number_input(
-        'Estimated Family Income ($)',
+        'Estimated Family Income (USD)',
         min_value=0, max_value=500000,
         value=int(inc_val) if inc_val is not None else None,
         help="Approximate annual household income in US dollars"
     )
 
-    unemp_val = get_val('Unemployment rate')
-    unemployment_rate = st.number_input(
-        'Local Unemployment Rate (%)',
-        min_value=0.0, max_value=100.0,
-        value=float(unemp_val) if unemp_val is not None else None,
-        help="The unemployment rate in the student's home region (e.g. 5.2 = 5.2%)"
+    emp_val = get_val('employment_status')
+    employment_status = st.selectbox(
+        'Employment Status (Local Region)',
+        options=[0, 1],
+        index=int(emp_val) if emp_val is not None else None,
+        format_func=lambda x: "Yes - Employed" if x == 1 else "No - Unemployed",
+        help="Is there employment availability in the student's region? (0=No, 1=Yes)"
     )
 
     age_val = get_val('Age at enrollment')
@@ -152,7 +159,7 @@ with col_btn2:
         if gpa is None: missing.append("Current GPA")
         if engagement is None: missing.append("Online Course Activity")
         if income_proxy is None: missing.append("Estimated Family Income")
-        if unemployment_rate is None: missing.append("Local Unemployment Rate")
+        if employment_status is None: missing.append("Employment Status")
         if age is None: missing.append("Age When They Enrolled")
         if gender is None: missing.append("Student Gender")
 
@@ -163,17 +170,19 @@ with col_btn2:
             attendance_ratio = attendance_pct / 100.0
             # Convert risk_score from 1–10 scale → 0.0–1.0 ratio for the model
             risk_score_ratio = (risk_score_display - 1) / 9.0
+            # Convert income from USD to Naira
+            income_naira = convert_usd_to_naira(income_proxy)
 
             st.session_state.selected_preset_name = selected_preset
             st.session_state.student_data = {
                 'gpa': gpa,
                 'attendance': attendance_ratio,
                 'engagement': engagement,
-                'income_proxy': income_proxy,
+                'income_proxy': income_naira,
                 'low_gpa_flag': 1 if gpa < 2.0 else 0,
                 'low_engagement_flag': 1 if engagement < 0.4 else 0,
                 'risk_score': risk_score_ratio,
-                'Unemployment rate': unemployment_rate,
+                'employment_status': employment_status,
                 'Age at enrollment': age,
                 'Gender': gender
             }
