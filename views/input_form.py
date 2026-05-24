@@ -136,7 +136,7 @@ with col3:
         'Estimated Family Income (NGN)',
         min_value=0, max_value=500000,
         value=int(inc_val) if inc_val is not None else None,
-        help="Approximate annual household income in US dollars"
+        help="Approximate annual household income in NGN dollars"
     )
 
     emp_val = get_val('employment_status')
