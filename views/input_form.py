@@ -5,7 +5,7 @@ import os
 
 # Add parent directory to path to import utils
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from utils import convert_usd_to_naira
+from utils import convert_usd_to_naira, convert_naira_to_usd
 
 st.markdown("""
 <div style="text-align: center; margin-bottom: 30px;">
@@ -131,11 +131,13 @@ with col2:
 with col3:
     st.markdown("### Background Details")
 
-    inc_val = get_val('income_proxy')
+    inc_val_usd = get_val('income_proxy')
+    inc_val_ngn = convert_usd_to_naira(inc_val_usd) if inc_val_usd is not None else None
+    
     income_proxy = st.number_input(
         'Estimated Family Income (NGN)',
         min_value=0, max_value=500000000,
-        value=int(inc_val) if inc_val is not None else None,
+        value=int(inc_val_ngn) if inc_val_ngn is not None else None,
         help="Approximate annual household income in NGN dollars"
     )
 
@@ -184,15 +186,15 @@ with col_btn2:
             attendance_ratio = attendance_pct / 100.0
             # Convert risk_score from 1–10 scale → 0.0–1.0 ratio for the model
             risk_score_ratio = (risk_score_display - 1) / 9.0
-            # Convert income from USD to Naira
-            income_naira = convert_usd_to_naira(income_proxy)
+            # Convert income from NGN to USD for the model
+            income_usd = convert_naira_to_usd(income_proxy)
 
             st.session_state.selected_preset_name = selected_preset
             st.session_state.student_data = {
                 'gpa': gpa,
                 'attendance': attendance_ratio,
                 'engagement': engagement,
-                'income_proxy': income_naira,
+                'income_proxy': income_usd,
                 'low_gpa_flag': 1 if gpa < 2.0 else 0,
                 'low_engagement_flag': 1 if engagement < 0.4 else 0,
                 'risk_score': risk_score_ratio,

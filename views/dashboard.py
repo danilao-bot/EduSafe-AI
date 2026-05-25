@@ -149,7 +149,7 @@ with c1:
             <div>GPA:<br/><b>{data.get('gpa', 0):.2f}</b></div>
             <div>ATTENDANCE:<br/><b>{att_display}</b></div>
             <div>ENGAGEMENT:<br/><b>{data.get('engagement', 0):.1%}</b></div>
-            <div>INCOME:<br/><b>{format_naira(data.get('income_proxy', 0))}</b></div>
+            <div>INCOME:<br/><b>{format_naira(convert_usd_to_naira(data.get('income_proxy', 0)))}</b></div>
         </div>
     </div></div>""", unsafe_allow_html=True)
 
@@ -214,7 +214,7 @@ with col_exp_left:
                     if attr['feature'] in ['attendance', 'engagement']:
                         val_str = f"{val:.1%}" if val is not None else "N/A"
                     elif attr['feature'] == 'income_proxy':
-                        val_str = format_naira(val) if val is not None else "N/A"
+                        val_str = format_naira(convert_usd_to_naira(val)) if val is not None else "N/A"
                     elif attr['feature'] == 'Unemployment rate':
                         val_str = employment_status_display(val) if val is not None else "N/A"
                     else:
