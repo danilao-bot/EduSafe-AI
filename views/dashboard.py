@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import os
 import sys
+import streamlit.components.v1 as components
 
 # Add parent directory to path to import utils
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -50,13 +51,13 @@ models  = st.session_state.get("models", {})
 preset_display_name = st.session_state.get("selected_preset_name", "Custom Profile").split(" (")[0]
 
 FEATURES = ['gpa', 'attendance', 'engagement', 'income_proxy', 'low_gpa_flag',
-            'low_engagement_flag', 'risk_score', 'employment_status', 'Age at enrollment', 'Gender']
+            'low_engagement_flag', 'risk_score', 'Unemployment rate', 'Age at enrollment', 'Gender']
 
 feature_display_names = {
     'gpa': 'GPA', 'attendance': 'Attendance', 'engagement': 'Online Engagement',
     'income_proxy': 'Family Income', 'low_gpa_flag': 'Low GPA Flag',
     'low_engagement_flag': 'Low Engagement Flag', 'risk_score': "Counselor's Concern",
-    'employment_status': 'Employment Status', 'Age at enrollment': 'Enrollment Age', 'Gender': 'Gender'
+    'Unemployment rate': 'Employment Status', 'Age at enrollment': 'Enrollment Age', 'Gender': 'Gender'
 }
 
 # ── Safe Data Preparation ─────────────────────────────────────────────────────
@@ -214,7 +215,7 @@ with col_exp_left:
                         val_str = f"{val:.1%}" if val is not None else "N/A"
                     elif attr['feature'] == 'income_proxy':
                         val_str = format_naira(val) if val is not None else "N/A"
-                    elif attr['feature'] == 'employment_status':
+                    elif attr['feature'] == 'Unemployment rate':
                         val_str = employment_status_display(val) if val is not None else "N/A"
                     else:
                         val_str = str(val) if val is not None else "N/A"
@@ -296,7 +297,30 @@ with col_exp_right:
 with st.expander("Advanced Technical Diagnostics"):
     t1, t2 = st.tabs(["SHAP Force Diagram", "LIME Perturbation Chart"])
     with t1:
-        st.info("The live weights panel above already renders real-time SHAP attribution bars. Full Matplotlib SHAP force plots require a local execution environment.")
+        if not SHAP_AVAILABLE:
+            st.warning("SHAP library is not installed.")
+        elif active_model is None:
+            st.warning("The selected model could not be loaded for SHAP plotting.")
+        else:
+            try:
+                exp_key = active_model_key if active_model_key in ['rf', 'xgboost'] else 'rf'
+                explainer = shap.TreeExplainer(models[exp_key])
+                shap_vals = explainer.shap_values(input_scaled)
+                
+                if isinstance(shap_vals, list):
+                    sv = shap_vals[1][0]
+                    ev = explainer.expected_value[1]
+                else:
+                    sv = shap_vals[0, :, 1] if len(shap_vals.shape) == 3 else shap_vals[0]
+                    ev = explainer.expected_value
+                    if isinstance(ev, (list, np.ndarray)):
+                        ev = ev[-1]
+                        
+                fig = shap.force_plot(ev, sv, input_scaled.iloc[0,:], feature_names=FEATURES)
+                shap_html = f"<head>{shap.getjs()}</head><body>{fig.html()}</body>"
+                components.html(shap_html, height=200)
+            except Exception as e:
+                st.warning(f"SHAP plot could not be generated. ({e})")
     with t2:
         if not LIME_AVAILABLE or not MPL_AVAILABLE:
             st.warning("LIME or Matplotlib is not available in this environment.")

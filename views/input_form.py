@@ -19,17 +19,17 @@ MOCK_PROFILES = {
     "Alex Rivera (High Risk of Attrition)": {
         'gpa': 1.6, 'attendance': 58, 'engagement': 0.32, 'income_proxy': 18000,
         'low_gpa_flag': 1, 'low_engagement_flag': 1, 'risk_score': 8,
-        'employment_status': 1, 'Age at enrollment': 23, 'Gender': 1
+        'Unemployment rate': 1, 'Age at enrollment': 23, 'Gender': 1
     },
     "Chloe Chen (Stellar Academic Standing)": {
         'gpa': 3.9, 'attendance': 98, 'engagement': 0.95, 'income_proxy': 65000,
         'low_gpa_flag': 0, 'low_engagement_flag': 0, 'risk_score': 1,
-        'employment_status': 0, 'Age at enrollment': 18, 'Gender': 0
+        'Unemployment rate': 0, 'Age at enrollment': 18, 'Gender': 0
     },
     "Jordan Smith (Borderline Warning)": {
         'gpa': 2.3, 'attendance': 76, 'engagement': 0.55, 'income_proxy': 32000,
         'low_gpa_flag': 0, 'low_engagement_flag': 0, 'risk_score': 5,
-        'employment_status': 1, 'Age at enrollment': 21, 'Gender': 1
+        'Unemployment rate': 1, 'Age at enrollment': 21, 'Gender': 1
     }
 }
 
@@ -134,12 +134,12 @@ with col3:
     inc_val = get_val('income_proxy')
     income_proxy = st.number_input(
         'Estimated Family Income (NGN)',
-        min_value=0, max_value=500000,
+        min_value=0, max_value=500000000,
         value=int(inc_val) if inc_val is not None else None,
         help="Approximate annual household income in NGN dollars"
     )
 
-    emp_val = get_val('employment_status')
+    emp_val = get_val('Unemployment rate')
     employment_status = st.selectbox(
         'Employment Status (Local Region)',
         options=[0, 1],
@@ -196,7 +196,7 @@ with col_btn2:
                 'low_gpa_flag': 1 if gpa < 2.0 else 0,
                 'low_engagement_flag': 1 if engagement < 0.4 else 0,
                 'risk_score': risk_score_ratio,
-                'employment_status': employment_status,
+                'Unemployment rate': employment_status,
                 'Age at enrollment': age,
                 'Gender': gender
             }
